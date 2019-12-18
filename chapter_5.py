@@ -6,13 +6,13 @@ import typing
 import pyglet
 import random
 
-class Chapter1View(arcade.View):
+class Chapter5View(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
     
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("Chapter 1", settings.WIDTH/2, settings.HEIGHT/2,
+        arcade.draw_text("Chapter 5", settings.WIDTH/2, settings.HEIGHT/2,
                          arcade.color.BLACK, font_size=30, anchor_x="center")
     
     def on_key_press(self, key, modifiers):
