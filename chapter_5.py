@@ -120,7 +120,7 @@ if __name__ == "__main__":
     """
     from utils import FakeDirector
     window = arcade.Window(settings.WIDTH, settings.HEIGHT)
-    my_view = Chapter1View()
+    my_view = Chapter5View()
     my_view.director = FakeDirector(close_on_next_view=True)
     window.show_view(my_view)
     arcade.run()
