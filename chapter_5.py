@@ -5,6 +5,7 @@ import settings
 import typing
 import pyglet
 import random
+import os
 
 class Chapter5View(arcade.View):
     def on_show(self):
@@ -33,7 +34,8 @@ class Sound:
 class PlaysoundException(Exception):
     pass
 
-
+def text(char, line):
+    arcade.draw_text(line, 20, 20, arcade.color.WHITE, font_size=20, anchor_x="center")
 
 def _load_sound_library():
     """
