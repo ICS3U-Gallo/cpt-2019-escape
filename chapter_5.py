@@ -6,24 +6,36 @@ import typing
 import pyglet
 import random
 import os
+x=100
+y=100
 
 class Chapter5View(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
     
     def on_draw(self):
+        global x
+        global y
         arcade.start_render()
-        arcade.draw_text("Chapter 5", settings.WIDTH/2, settings.HEIGHT/2,
-                         arcade.color.BLACK, font_size=30, anchor_x="center")
-    
+        #arcade.draw_text("Chapter 5", settings.WIDTH/2, settings.HEIGHT/2, arcade.color.BLACK, font_size=30, anchor_x="center")
+        create_image('images/test.png', x, y, 100, 100)
+
     def on_key_press(self, key, modifiers):
-        self.director.next_view()
+        global x
+        global y
+        if key=='d':
+            x+=5
+        if key=='a':
+            x-=5
+
+        #self.director.next_view()
 
 class Sound:
 
     def __init__(self, file_name: str):
         self.file_name = file_name
         self.player = pyglet.media.load(file_name)
+
 
     def play(self):
         if self.player.is_queued:
