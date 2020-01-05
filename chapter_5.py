@@ -15,11 +15,12 @@ SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Sprite Enemies in a Platformer Example"
+SCREEN_TITLE = "omae wa mou shinderu nani"
 
 # How many pixels to keep as a minimum margin between the character
 # and the edge of the screen.
-VIEWPORT_MARGIN = 40
+VIEWPORT_MARGIN = 250
+
 RIGHT_MARGIN = 150
 
 # Physics
@@ -66,6 +67,20 @@ class Chapter5View(arcade.View):
             wall.left = x
             self.wall_list.append(wall)
 
+        for x in range(SPRITE_SIZE * 16, SPRITE_SIZE * 31, SPRITE_SIZE):
+            wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+
+            wall.bottom = 0
+            wall.left = x
+            self.wall_list.append(wall)
+
+        for x in range(SPRITE_SIZE * 34, SPRITE_SIZE * 41, SPRITE_SIZE):
+            wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+
+            wall.bottom = 0
+            wall.left = x
+            self.wall_list.append(wall)
+
         # Draw the platform
         for x in range(SPRITE_SIZE * 3, SPRITE_SIZE * 8, SPRITE_SIZE):
             wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
@@ -73,6 +88,8 @@ class Chapter5View(arcade.View):
             wall.bottom = SPRITE_SIZE * 3
             wall.left = x
             self.wall_list.append(wall)
+
+
 
         # Draw the crates
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE * 5):
@@ -82,7 +99,25 @@ class Chapter5View(arcade.View):
             wall.left = x
             self.wall_list.append(wall)
 
+        wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+
+        wall.bottom = SPRITE_SIZE
+        wall.left = SPRITE_SIZE*16
+        self.wall_list.append(wall)
+
+
         # -- Draw an enemy on the ground
+        enemy = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+
+        enemy.bottom = SPRITE_SIZE
+        enemy.left = SPRITE_SIZE * 17
+
+        # Set enemy initial speed
+        enemy.change_x = 10
+        enemy.boundary_right = SPRITE_SIZE * 31
+        enemy.boundary_left = SPRITE_SIZE * 16
+        self.enemy_list.append(enemy)
+
         enemy = arcade.Sprite("images/temp.png", SPRITE_SCALING)
 
         enemy.bottom = SPRITE_SIZE
@@ -104,20 +139,20 @@ class Chapter5View(arcade.View):
         enemy.change_x = 2
         self.enemy_list.append(enemy)
 
+
         # -- Set up the player
-        self.player_sprite = arcade.Sprite("images/test.png",SPRITE_SCALING)
+        self.player_sprite = arcade.Sprite("images/test.png",SPRITE_SCALING/2)
         self.player_list.append(self.player_sprite)
 
         # Starting position of the player
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 270
 
-        self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
-                                                             self.wall_list,
-                                                             gravity_constant=GRAVITY)
+        self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,self.wall_list,gravity_constant=GRAVITY)
 
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
+
 
     def on_draw(self):
         """
@@ -172,17 +207,25 @@ class Chapter5View(arcade.View):
                 elif enemy.boundary_right is not None and enemy.right > enemy.boundary_right:
                     enemy.change_x *= -1
 
-                    # Scroll left
-                left_boundary = self.view_left + VIEWPORT_MARGIN
-                if self.player_sprite.left < left_boundary:
-                    self.view_left -= left_boundary - self.player_sprite.left
-                    changed = True
+            # --- Manage Scrolling ---
+
+                # Keep track of if we changed the boundary. We don't want to call the
+                # set_viewport command if we didn't change the view port.
+            changed = False
+                    # Scroll leftd
+            left_boundary = self.view_left + VIEWPORT_MARGIN
+            if self.player_sprite.left < left_boundary:
+                self.view_left -= left_boundary - self.player_sprite.left
+                changed = True
 
                 # Scroll right
-                right_boundary = self.view_left + SCREEN_WIDTH - VIEWPORT_MARGIN
-                if self.player_sprite.right > right_boundary:
-                    self.view_left += self.player_sprite.right - right_boundary
-                    changed = True
+            right_boundary = self.view_left + SCREEN_WIDTH - VIEWPORT_MARGIN
+            if self.player_sprite.right > right_boundary:
+                self.view_left += self.player_sprite.right - right_boundary
+                changed = True
+            if changed:
+                arcade.set_viewport(self.view_left,SCREEN_WIDTH + self.view_left - 1,self.view_bottom,SCREEN_HEIGHT + self.view_bottom - 1)
+
 
             # Update the player using the physics engine
             self.physics_engine.update()
@@ -190,6 +233,7 @@ class Chapter5View(arcade.View):
             # See if the player hit a worm. If so, game over.
             if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
                 self.game_over = True
+
 class Sound:
 
     def __init__(self, file_name: str):
