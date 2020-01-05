@@ -90,7 +90,6 @@ class Chapter5View(arcade.View):
             self.wall_list.append(wall)
 
 
-
         # Draw the crates
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE * 5):
             wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
