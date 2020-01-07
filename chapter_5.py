@@ -11,6 +11,10 @@ y = 100
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
+story=0
+lines=0
+text_line_0=['idk','100','SCREEN_TITLE = "omae wa mou shinderu nani"','SCREEN_TITLE = "omae wa mou shinderu nani?"','SCREEN_TITLE = "omae wa mou shinderu nani????"']
+text_line_1=['a','b','c']
 
 
 SCREEN_WIDTH = 800
@@ -140,7 +144,7 @@ class Chapter5View(arcade.View):
 
 
         # -- Set up the player
-        self.player_sprite = arcade.Sprite("images/test.png",SPRITE_SCALING/2)
+        self.player_sprite = arcade.Sprite("images/test.png",SPRITE_SCALING)
         self.player_list.append(self.player_sprite)
 
         # Starting position of the player
@@ -154,6 +158,10 @@ class Chapter5View(arcade.View):
 
 
     def on_draw(self):
+        global story
+        global lines
+        global text_line_0
+        global text_line_1
         """
                 Render the screen.
                 """
@@ -165,6 +173,15 @@ class Chapter5View(arcade.View):
         self.player_list.draw()
         self.wall_list.draw()
         self.enemy_list.draw()
+        if story==0:
+            img_pos=int(text_line_0[lines*5+1])
+            #arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(255, 0, 0, 100)) good for death screen
+            arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(0, 0, 0, 150))
+            create_image('images/'+text_line_0[lines*5]+'.png', img_pos, 0, 300,450)
+            arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,160,(0, 0, 0, 150))
+            arcade.draw_text(text_line_0[lines*5], 150, 120, arcade.color.WHITE, 20)
+            for i in range(3):
+                arcade.draw_text(text_line_0[lines*5+i+2], 150, 90-(30*i), arcade.color.WHITE, 20)
 
     def on_key_press(self, key, modifiers):
 
@@ -185,12 +202,18 @@ class Chapter5View(arcade.View):
         if key == arcade.key.A or key == arcade.key.D:
             self.player_sprite.change_x = 0
 
+    def on_mouse_press(x, y, button, modifiers):
+        global lines
+        global story
+        if story!=11:
+            lines+=1
 
     def on_update(self, delta_time):
+        global story
         """ Movement and game logic """
 
         # Update the player based on the physics engine
-        if not self.game_over:
+        if not self.game_over and story==11:
             # Move the enemies
             self.enemy_list.update()
 
