@@ -1,0 +1,11 @@
+Fourth Minigame (Peter):
+  The user has to shoot antidotes towards the viruses
+  If a virus is shot, then it disappears 
+  The user has to reach a score of 100 in order to beat the minigame
+  
+  Features:
+    The user will shoot rays of antidotes similiar to asteroid smasher
+    The user will be able to move and orient themselves around the screen
+    The viruses will spawn randomly over the screen
+    The viruses disappear when shot by an antidote
+    The score will be trached at the top of the screen

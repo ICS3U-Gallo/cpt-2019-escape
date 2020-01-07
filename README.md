@@ -1,9 +1,27 @@
 # Escape
-Program description. Replace with description of your program. Give a description of each scene.
+First Minigame (Diya): 
+
+Second Minigame (Alex): 
+The collector needs the 3 rare jewels to protect his trading company. He is willing to trade for the piece of the antidote against the Virus. You need to catch all but remember there are diseased virus that if you do kill will infect you so be careful!. 
+
+Third Minigame (Martin):
+Similar to the dinosaur game  
+The antidote is deemed useless without artillery. Avoid the viruses to get the artillery at the end of the level
+
+Fourth Minigame (Peter):
+The user has to shoot antidotes towards the viruses
+If a virus is shot, then it disappears 
+The user has to reach a score of 100 in order to beat the minigame
+
+Fifth Minigame (Jason): 
+
 
 ### Group Members:
-- Member1
-- Member2
+- Peter
+- Alex
+- Martin
+- Diya
+- Jason
 
 
 # CPT 2019
