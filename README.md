@@ -5,7 +5,7 @@ Second Minigame (Alex):
 The collector needs the 3 rare jewels to protect his trading company. He is willing to trade for the piece of the antidote against the Virus. You need to catch all but remember there are diseased virus that if you do kill will infect you so be careful!. 
 
 Third Minigame (Martin):
-Similar to the dinosaur game  
+Similar to the mario game  
 The antidote is deemed useless without artillery. Avoid the viruses to get the artillery at the end of the level
 
 Fourth Minigame (Peter):
