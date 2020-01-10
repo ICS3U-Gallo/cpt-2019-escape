@@ -13,8 +13,10 @@ SPRITE_NATIVE_SIZE = 128
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 story=0
 lines=0
-text_line_0=['slime_red','100','','SCREEN_TITLE = "omae wa mou shinderu nani"','SCREEN_TITLE = "omae wa mou shinderu nani?"']
-text_line_1=[]
+
+text_line_0=['game_over','100','','SCREEN_TITLE = "omae wa mou shinderu nani"','SCREEN_TITLE = "omae wa mou shinderu nani????"']
+
+
 
 
 SCREEN_WIDTH = 800
@@ -23,7 +25,7 @@ SCREEN_TITLE = "omae wa mou shinderu nani"
 
 # How many pixels to keep as a minimum margin between the character
 # and the edge of the screen.
-VIEWPORT_MARGIN = 250
+VIEWPORT_MARGIN = SCREEN_WIDTH/2
 
 RIGHT_MARGIN = 150
 
@@ -65,21 +67,21 @@ class Chapter5View(arcade.View):
 
         # Draw the walls on the bottom
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE):
-            wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+            wall = arcade.Sprite("images/grass.png", SPRITE_SCALING)
 
             wall.bottom = 0
             wall.left = x
             self.wall_list.append(wall)
 
         for x in range(SPRITE_SIZE * 16, SPRITE_SIZE * 31, SPRITE_SIZE):
-            wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+            wall = arcade.Sprite("images/grass.png", SPRITE_SCALING)
 
             wall.bottom = 0
             wall.left = x
             self.wall_list.append(wall)
 
         for x in range(SPRITE_SIZE * 34, SPRITE_SIZE * 41, SPRITE_SIZE):
-            wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+            wall = arcade.Sprite("images/grass.png", SPRITE_SCALING)
 
             wall.bottom = 0
             wall.left = x
@@ -87,7 +89,7 @@ class Chapter5View(arcade.View):
 
         # Draw the platform
         for x in range(SPRITE_SIZE * 3, SPRITE_SIZE * 8, SPRITE_SIZE):
-            wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+            wall = arcade.Sprite("images/grass.png", SPRITE_SCALING)
 
             wall.bottom = SPRITE_SIZE * 3
             wall.left = x
@@ -96,13 +98,13 @@ class Chapter5View(arcade.View):
 
         # Draw the crates
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE * 5):
-            wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+            wall = arcade.Sprite("images/wood.png", SPRITE_SCALING)
 
             wall.bottom = SPRITE_SIZE
             wall.left = x
             self.wall_list.append(wall)
 
-        wall = arcade.Sprite("images/temp.png", SPRITE_SCALING)
+        wall = arcade.Sprite("images/wood.png", SPRITE_SCALING)
 
         wall.bottom = SPRITE_SIZE
         wall.left = SPRITE_SIZE*16
@@ -110,7 +112,10 @@ class Chapter5View(arcade.View):
 
 
         # -- Draw an enemy on the ground
-        enemy = arcade.Sprite("images/slime.png", SPRITE_SCALING/2)
+
+
+        enemy = arcade.Sprite("images/virus_boss.png", SPRITE_SCALING/2)
+
 
         enemy.bottom = SPRITE_SIZE
         enemy.left = SPRITE_SIZE * 17
@@ -121,7 +126,10 @@ class Chapter5View(arcade.View):
         enemy.boundary_left = SPRITE_SIZE * 16
         self.enemy_list.append(enemy)
 
-        enemy = arcade.Sprite("images/slime_red.png", SPRITE_SCALING/2)
+
+
+        enemy = arcade.Sprite("images/virus_boss.png", SPRITE_SCALING/2)
+
 
         enemy.bottom = SPRITE_SIZE
         enemy.left = SPRITE_SIZE * 2
@@ -131,7 +139,10 @@ class Chapter5View(arcade.View):
         self.enemy_list.append(enemy)
 
         # -- Draw a enemy on the platform
-        enemy = arcade.Sprite("images/slime.png", SPRITE_SCALING/2)
+
+
+        enemy = arcade.Sprite("images/virus_boss.png", SPRITE_SCALING/2)
+
 
         enemy.bottom = SPRITE_SIZE * 4
         enemy.left = SPRITE_SIZE * 4
@@ -144,7 +155,9 @@ class Chapter5View(arcade.View):
 
 
         # -- Set up the player
-        self.player_sprite = arcade.Sprite("images/player.png",SPRITE_SCALING/2)
+
+        self.player_sprite = arcade.Sprite("images/test.png",SPRITE_SCALING)
+
         self.player_list.append(self.player_sprite)
 
         # Starting position of the player
@@ -154,7 +167,7 @@ class Chapter5View(arcade.View):
         self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,self.wall_list,gravity_constant=GRAVITY)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcade.set_background_color((188, 212, 230)	)
 
 
     def on_draw(self):
@@ -174,14 +187,24 @@ class Chapter5View(arcade.View):
         self.wall_list.draw()
         self.enemy_list.draw()
         if story==0:
-            img_pos=int(text_line_0[lines*5+1])
-            #arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(255, 0, 0, 100)) good for death screen
-            arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(0, 0, 0, 150))
-            create_image('images/'+text_line_0[lines*5]+text_line_0[lines*5+2]+'.png', img_pos, 0, 300,450)
-            arcade.draw_xywh_rectangle_filled(25,25,SCREEN_WIDTH-50,145,(0, 0, 0, 150))
-            arcade.draw_text(text_line_0[lines*5], 150, 130, arcade.color.WHITE, 20)
-            for i in range(2):
-                arcade.draw_text(text_line_0[lines*5+i+3], 150, 100-(30*i), arcade.color.WHITE, 20)
+            if len(text_line_0)//5<=lines:
+                story=11
+                lines=0
+            else:
+
+                img_pos=int(text_line_0[lines*5+1])
+                #arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(255, 0, 0, 100)) good for death screen
+                arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(0, 0, 0, 150))
+
+                create_image('images/'+text_line_0[lines*5]+text_line_0[lines*5+2]+'.png', img_pos, 0, 300,450)
+                arcade.draw_xywh_rectangle_filled(25,25,SCREEN_WIDTH-50,145,(0, 0, 0, 150))
+                arcade.draw_text(text_line_0[lines*5], 150, 130, arcade.color.WHITE, 20)
+                for i in range(2):
+                    arcade.draw_text(text_line_0[lines*5+i+3], 150, 100-(30*i), arcade.color.WHITE, 20)
+        if self.game_over or self.player_sprite.center_y < -11:
+            arcade.draw_xywh_rectangle_filled(self.player_sprite.center_x-400,0,SCREEN_WIDTH*2,SCREEN_HEIGHT*2,(255, 0, 0, 100))
+            create_image('images/game_over.png', self.player_sprite.center_x-200, 200, SCREEN_WIDTH-400, SCREEN_HEIGHT-400)
+            arcade.draw_text('GAME OVER', self.player_sprite.center_x-128, 150, arcade.color.WHITE, 40)
 
     def on_key_press(self, key, modifiers):
 
@@ -202,7 +225,7 @@ class Chapter5View(arcade.View):
         if key == arcade.key.A or key == arcade.key.D:
             self.player_sprite.change_x = 0
 
-    def on_mouse_press(x, y, button, modifiers):
+    def on_mouse_press(self, x, y, button, modifiers):
         global lines
         global story
         if story!=11:
@@ -213,7 +236,8 @@ class Chapter5View(arcade.View):
         """ Movement and game logic """
 
         # Update the player based on the physics engine
-        if not self.game_over and story==11:
+
+        if not self.game_over and story==11 and self.player_sprite.center_y>-11:
             # Move the enemies
             self.enemy_list.update()
 
@@ -255,6 +279,7 @@ class Chapter5View(arcade.View):
             # See if the player hit a worm. If so, game over.
             if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
                 self.game_over = True
+
 
 class Sound:
 
