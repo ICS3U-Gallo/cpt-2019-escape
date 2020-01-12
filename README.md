@@ -14,7 +14,7 @@ If a virus is shot, then it disappears
 The user has to reach a score of 100 in order to beat the minigame
 
 Fifth Minigame (Jason): 
-
+player navigates obstacles and fights virus final boss
 
 ### Group Members:
 - Peter
