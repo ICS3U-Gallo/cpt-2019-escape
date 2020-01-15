@@ -5,18 +5,21 @@ import typing
 import pyglet
 import random
 import os
+import math
 
 x = 100
 y = 100
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
+SPRITE_SCALING_LASER = 0.065
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
+BULLET_SPEED = 10
 story=-1
 lines=0
 a=0
 
-text_line_0=['game_over','100','','SCREEN_TITLE = "omae wa mou shinderu nani"','SCREEN_TITLE = "omae wa mou shinderu nani????"',
-             'test', '500','','this is a test line lol', 'does this code work ']
+text_line_0=['padoru','100','','line for the main character to saoy','replace this text with actual lines',
+             'padoru', '500','','this is a test line lol', 'does this code work ']
 
 
 
@@ -52,6 +55,7 @@ class Chapter5View(arcade.View):
         self.wall_list = None
         self.enemy_list = None
         self.player_list = None
+        self.bullet_list=None
 
         # Set up the player
         self.player_sprite = None
@@ -66,6 +70,7 @@ class Chapter5View(arcade.View):
         self.wall_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
 
         # Draw the walls on the bottom
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE):
@@ -126,6 +131,7 @@ class Chapter5View(arcade.View):
         enemy.change_x = 10
         enemy.boundary_right = SPRITE_SIZE * 31
         enemy.boundary_left = SPRITE_SIZE * 16
+        enemy.damage = 0
         self.enemy_list.append(enemy)
 
 
@@ -138,6 +144,7 @@ class Chapter5View(arcade.View):
 
         # Set enemy initial speed
         enemy.change_x = 2
+        enemy.damage=1
         self.enemy_list.append(enemy)
 
         # -- Draw a enemy on the platform
@@ -153,6 +160,7 @@ class Chapter5View(arcade.View):
         enemy.boundary_right = SPRITE_SIZE * 8
         enemy.boundary_left = SPRITE_SIZE * 3
         enemy.change_x = 2
+        enemy.damage=1
         self.enemy_list.append(enemy)
 
 
@@ -189,6 +197,7 @@ class Chapter5View(arcade.View):
         self.player_list.draw()
         self.wall_list.draw()
         self.enemy_list.draw()
+        self.bullet_list.draw()
         if story==-1:
             music=load_sound('sound/bgm_maoudamashii_fantasy11.mp3')
             play_sound(music)
@@ -246,6 +255,42 @@ class Chapter5View(arcade.View):
         global story
         if story!=11:
             lines+=1
+        else:
+            bullet = arcade.Sprite("images/padoru.png", SPRITE_SCALING_LASER)
+
+            # Position the bullet at the player's current location
+            start_x = self.player_sprite.center_x
+            start_y = self.player_sprite.center_y
+            bullet.center_x = start_x
+            bullet.center_y = start_y
+
+            # Get from the mouse the destination location for the bullet
+            # IMPORTANT! If you have a scrolling screen, you will also need
+            # to add in self.view_bottom and self.view_left.
+            dest_x = x+self.view_left
+            dest_y = y
+
+            # Do math to calculate how to get the bullet to the destination.
+            # Calculation the angle in radians between the start points
+            # and end points. This is the angle the bullet will travel.
+            x_diff = dest_x - start_x
+            y_diff = dest_y - start_y
+            angle = math.atan2(y_diff, x_diff)
+
+            # Angle the bullet sprite so it doesn't look like it is flying
+            # sideways.
+            bullet.angle = math.degrees(angle)
+            print(f"Bullet angle: {bullet.angle:.2f}")
+
+            # Taking into account the angle, calculate our change_x
+            # and change_y. Velocity is how fast the bullet travels.
+            bullet.change_x = math.cos(angle) * BULLET_SPEED
+            bullet.change_y = math.sin(angle) * BULLET_SPEED
+            sound=load_sound('sound/game_swordman-attack3.mp3')
+            play_sound(sound)
+
+            # Add the bullet to the appropriate lists
+            self.bullet_list.append(bullet)
 
     def on_update(self, delta_time):
         global story
@@ -295,6 +340,34 @@ class Chapter5View(arcade.View):
             # See if the player hit a worm. If so, game over.
             if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
                 self.game_over = True
+        """ Movement and game logic """
+
+        # Call update on all sprites
+        self.bullet_list.update()
+
+        # Loop through each bullet
+        for bullet in self.bullet_list:
+
+            # Check this bullet to see if it hit a coin
+            hit_list = arcade.check_for_collision_with_list(bullet, self.wall_list)
+            hit_list2 = arcade.check_for_collision_with_list(bullet, self.enemy_list)
+
+
+            # If it did, get rid of the bullet
+            if len(hit_list) > 0 or len(hit_list2) > 0:
+                bullet.remove_from_sprite_lists()
+
+            # For every coin we hit, add to the score and remove the coin
+            #for coin in hit_list:
+            #    coin.remove_from_sprite_lists()
+            #    self.score += 1
+
+            # If the bullet flies off-screen, remove it.
+            if bullet.bottom > 1000 or bullet.top < -11 or bullet.right < -2019 or bullet.left > 3100588100:
+                bullet.remove_from_sprite_lists()
+
+
+
 
 
 class Sound:
