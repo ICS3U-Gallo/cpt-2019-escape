@@ -11,10 +11,12 @@ y = 100
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
-story=0
+story=-1
 lines=0
+a=0
 
-text_line_0=['game_over','100','','SCREEN_TITLE = "omae wa mou shinderu nani"','SCREEN_TITLE = "omae wa mou shinderu nani????"']
+text_line_0=['game_over','100','','SCREEN_TITLE = "omae wa mou shinderu nani"','SCREEN_TITLE = "omae wa mou shinderu nani????"',
+             'test', '500','','this is a test line lol', 'does this code work ']
 
 
 
@@ -175,6 +177,7 @@ class Chapter5View(arcade.View):
         global lines
         global text_line_0
         global text_line_1
+        global a
         """
                 Render the screen.
                 """
@@ -186,10 +189,17 @@ class Chapter5View(arcade.View):
         self.player_list.draw()
         self.wall_list.draw()
         self.enemy_list.draw()
-        if story==0:
+        if story==-1:
+            music=load_sound('sound/bgm_maoudamashii_fantasy11.mp3')
+            play_sound(music)
+            story=0
+        elif story==0:
             if len(text_line_0)//5<=lines:
+                sound=load_sound("sound/game_swordman-start1.mp3")
+                play_sound(sound)
                 story=11
                 lines=0
+
             else:
 
                 img_pos=int(text_line_0[lines*5+1])
@@ -205,12 +215,18 @@ class Chapter5View(arcade.View):
             arcade.draw_xywh_rectangle_filled(self.player_sprite.center_x-400,0,SCREEN_WIDTH*2,SCREEN_HEIGHT*2,(255, 0, 0, 100))
             create_image('images/game_over.png', self.player_sprite.center_x-200, 200, SCREEN_WIDTH-400, SCREEN_HEIGHT-400)
             arcade.draw_text('GAME OVER', self.player_sprite.center_x-128, 150, arcade.color.WHITE, 40)
+            if a==0:
+                sound=load_sound("sound/game_swordman-faint1.mp3")
+                play_sound(sound)
+                a+=1
 
     def on_key_press(self, key, modifiers):
 
         if key == arcade.key.W:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = JUMP_SPEED
+                sound=load_sound("sound/game_swordman-attack1.mp3")
+                play_sound(sound)
         elif key == arcade.key.A:
             self.player_sprite.change_x = -MOVEMENT_SPEED
         elif key == arcade.key.D:
