@@ -11,7 +11,7 @@ The antidote is deemed useless without artillery. Avoid the viruses to get the a
 Fourth Minigame (Peter):
 The user has to shoot antidotes towards the viruses
 If a virus is shot, then it disappears 
-The user has to reach a score of 100 in order to beat the minigame
+The user has to cure all the viruses
 
 Fifth Minigame (Jason): 
 player navigates obstacles and fights virus final boss
