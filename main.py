@@ -6,6 +6,7 @@ import random
 import settings
 
 from menu import MenuView
+from chapter_4 import Chapter4View
 from chapter_5 import Chapter5View
 
 class Director(arcade.Window):
@@ -14,6 +15,7 @@ class Director(arcade.Window):
         self.view_index = 0
         self.views = [
             MenuView,
+            Chapter4View,
             Chapter5View
         ]
         self.next_view()
