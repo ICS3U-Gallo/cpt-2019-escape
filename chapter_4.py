@@ -8,10 +8,6 @@ SPRITE_SCALING = 0.5
 WIDTH = 1200
 HEIGHT = 600
 
-MOVEMENT_SPEED = 5
-
-STARTING_ENEMY_COUNT = 10
-
 
 class MyGame (arcade.Window):
     def __init__(self, width, height, title):
@@ -21,6 +17,10 @@ class MyGame (arcade.Window):
 
         centerx_of_screen = WIDTH/2
         centery_of_screen = HEIGHT/2
+
+        self.MOVEMENT_SPEED = 5
+
+        self.STARTING_ENEMY_COUNT = 10
 
         self.sprite1 = arcade.Sprite(
                                     center_x=centerx_of_screen,
@@ -44,7 +44,7 @@ class MyGame (arcade.Window):
                                                              outer_alpha=255)
         self.enemies = arcade.SpriteList()
 
-        for i in range(STARTING_ENEMY_COUNT):
+        for i in range(self.STARTING_ENEMY_COUNT):
             enemy = arcade.Sprite()
             enemy.center_x = random.randrange(0, WIDTH-15)
             enemy.center_y = random.randrange(0, HEIGHT-15)
@@ -98,13 +98,13 @@ class MyGame (arcade.Window):
         self.sprite1.change_y = 0
 
         if self.up_pressed and not self.down_pressed:
-            self.sprite1.change_y = MOVEMENT_SPEED
+            self.sprite1.change_y = self.MOVEMENT_SPEED
         elif self.down_pressed and not self.up_pressed:
-            self.sprite1.change_y = -MOVEMENT_SPEED
+            self.sprite1.change_y = -self.MOVEMENT_SPEED
         if self.left_pressed and not self.right_pressed:
-            self.sprite1.change_x = -MOVEMENT_SPEED
+            self.sprite1.change_x = -self.MOVEMENT_SPEED
         elif self.right_pressed and not self.left_pressed:
-            self.sprite1.change_x = MOVEMENT_SPEED
+            self.sprite1.change_x = self.MOVEMENT_SPEED
 
         if self.sprite1.left < 0:
             self.sprite1.left = 0
