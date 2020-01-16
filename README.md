@@ -6,7 +6,7 @@ The collector needs the 3 rare jewels to protect his trading company. He is will
 
 Third Minigame (Martin):
 Similar to the mario game  
-The antidote is deemed useless without artillery. Avoid the viruses to get the artillery at the end of the level
+The antidote is deemed useless without artillery. Avoid the viruses to get the key to the artillery at the end of the level
 
 Fourth Minigame (Peter):
 The user has to shoot antidotes towards the viruses
