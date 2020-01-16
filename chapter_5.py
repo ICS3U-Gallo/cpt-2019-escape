@@ -20,6 +20,8 @@ a=0
 
 text_line_0=['padoru','100','','line for the main character to saoy','replace this text with actual lines',
              'padoru', '500','','this is a test line lol', 'does this code work ']
+text_line_1=['padoru','100','','line for the main character to saoy','replace this text with actual lines',
+             'padoru', '500','','this is a test line lol', 'does this code work ']
 
 
 
@@ -78,6 +80,7 @@ class Chapter5View(arcade.View):
 
             wall.bottom = 0
             wall.left = x
+            wall.damage=0
             self.wall_list.append(wall)
 
         for x in range(SPRITE_SIZE * 16, SPRITE_SIZE * 31, SPRITE_SIZE):
@@ -85,6 +88,7 @@ class Chapter5View(arcade.View):
 
             wall.bottom = 0
             wall.left = x
+            wall.damage=0
             self.wall_list.append(wall)
 
         for x in range(SPRITE_SIZE * 34, SPRITE_SIZE * 41, SPRITE_SIZE):
@@ -92,6 +96,15 @@ class Chapter5View(arcade.View):
 
             wall.bottom = 0
             wall.left = x
+            wall.damage=0
+            self.wall_list.append(wall)
+
+        for x in range(SPRITE_SIZE * 52, SPRITE_SIZE * 60, SPRITE_SIZE):
+            wall = arcade.Sprite("images/grass.png", SPRITE_SCALING)
+
+            wall.bottom = 0
+            wall.left = x
+            wall.damage=0
             self.wall_list.append(wall)
 
         # Draw the platform
@@ -100,6 +113,7 @@ class Chapter5View(arcade.View):
 
             wall.bottom = SPRITE_SIZE * 3
             wall.left = x
+            wall.damage=0
             self.wall_list.append(wall)
 
 
@@ -109,19 +123,22 @@ class Chapter5View(arcade.View):
 
             wall.bottom = SPRITE_SIZE
             wall.left = x
+            wall.damage=0
             self.wall_list.append(wall)
 
-        wall = arcade.Sprite("images/wood.png", SPRITE_SCALING)
+        for i in range(10):
+            wall = arcade.Sprite("images/wood.png", SPRITE_SCALING)
 
-        wall.bottom = SPRITE_SIZE
-        wall.left = SPRITE_SIZE*16
-        self.wall_list.append(wall)
+            wall.bottom = SPRITE_SIZE*(i+1)
+            wall.left = SPRITE_SIZE*16
+            wall.damage=1
+            self.wall_list.append(wall)
 
 
         # -- Draw an enemy on the ground
 
 
-        enemy = arcade.Sprite("images/virus_boss.png", SPRITE_SCALING/2)
+        enemy = arcade.Sprite("images/virus_red.png", SPRITE_SCALING/2)
 
 
         enemy.bottom = SPRITE_SIZE
@@ -136,7 +153,7 @@ class Chapter5View(arcade.View):
 
 
 
-        enemy = arcade.Sprite("images/virus_boss.png", SPRITE_SCALING/2)
+        enemy = arcade.Sprite("images/virus_blue.png", SPRITE_SCALING/2)
 
 
         enemy.bottom = SPRITE_SIZE
@@ -150,7 +167,7 @@ class Chapter5View(arcade.View):
         # -- Draw a enemy on the platform
 
 
-        enemy = arcade.Sprite("images/virus_boss.png", SPRITE_SCALING/2)
+        enemy = arcade.Sprite("images/virus_blue.png", SPRITE_SCALING/2)
 
 
         enemy.bottom = SPRITE_SIZE * 4
@@ -194,10 +211,12 @@ class Chapter5View(arcade.View):
         arcade.start_render()
 
         # Draw all the sprites.
+        create_image('images/mahou.png', SPRITE_SIZE*35, SPRITE_SIZE, SPRITE_SIZE*4, SPRITE_SIZE*4)
         self.player_list.draw()
         self.wall_list.draw()
         self.enemy_list.draw()
         self.bullet_list.draw()
+
         if story==-1:
             music=load_sound('sound/bgm_maoudamashii_fantasy11.mp3')
             play_sound(music)
@@ -220,6 +239,25 @@ class Chapter5View(arcade.View):
                 arcade.draw_text(text_line_0[lines*5], 150, 130, arcade.color.WHITE, 20)
                 for i in range(2):
                     arcade.draw_text(text_line_0[lines*5+i+3], 150, 100-(30*i), arcade.color.WHITE, 20)
+        elif story==1:
+            if len(text_line_1)//5<=lines:
+                sound=load_sound("sound/game_swordman-start1.mp3")
+                play_sound(sound)
+                story=11
+                lines=0
+                self.player_sprite.center_x = SPRITE_SIZE*55
+
+            else:
+
+                img_pos=int(text_line_1[lines*5+1])
+                #arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(255, 0, 0, 100)) good for death screen
+                arcade.draw_xywh_rectangle_filled(self.player_sprite.center_x-SCREEN_WIDTH/2,0,SCREEN_WIDTH*1.2,SCREEN_HEIGHT,(0, 0, 0, 150))
+
+                create_image('images/'+text_line_1[lines*5]+text_line_1[lines*5+2]+'.png', img_pos+self.player_sprite.center_x, 0, 300,450)
+                arcade.draw_xywh_rectangle_filled(self.player_sprite.center_x+25-SCREEN_WIDTH/2,25,SCREEN_WIDTH-50,145,(0, 0, 0, 150))
+                arcade.draw_text(text_line_1[lines*5], self.player_sprite.center_x-150-SCREEN_WIDTH/2, 130, arcade.color.WHITE, 20)
+                for i in range(2):
+                    arcade.draw_text(text_line_1[lines*5+i+3], self.player_sprite.center_x-150, 100-(30*i), arcade.color.WHITE, 20)
         if self.game_over or self.player_sprite.center_y < -11:
             arcade.draw_xywh_rectangle_filled(self.player_sprite.center_x-400,0,SCREEN_WIDTH*2,SCREEN_HEIGHT*2,(255, 0, 0, 100))
             create_image('images/game_over.png', self.player_sprite.center_x-200, 200, SCREEN_WIDTH-400, SCREEN_HEIGHT-400)
@@ -297,6 +335,8 @@ class Chapter5View(arcade.View):
         """ Movement and game logic """
 
         # Update the player based on the physics engine
+        if self.player_sprite.center_x>SPRITE_SIZE*35 and self.player_sprite.center_x<SPRITE_SIZE*40:
+            story=1
 
         if not self.game_over and story==11 and self.player_sprite.center_y>-11:
             # Move the enemies
@@ -358,8 +398,12 @@ class Chapter5View(arcade.View):
                 bullet.remove_from_sprite_lists()
 
             # For every coin we hit, add to the score and remove the coin
-            #for coin in hit_list:
-            #    coin.remove_from_sprite_lists()
+            for enemy in hit_list2:
+                if enemy.damage==1:
+                    enemy.remove_from_sprite_lists()
+            for wall in hit_list:
+                if wall.damage==1:
+                    wall.remove_from_sprite_lists()
             #    self.score += 1
 
             # If the bullet flies off-screen, remove it.
