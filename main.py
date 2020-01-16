@@ -1,4 +1,7 @@
 import arcade
+import math
+import os
+import random
 
 import settings
 
