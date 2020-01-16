@@ -9,7 +9,7 @@ WIDTH = 1200
 HEIGHT = 600
 
 
-class MyGame (arcade.Window):
+class Chapter4View(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
 
@@ -214,7 +214,7 @@ class MyGame (arcade.Window):
 
 
 def main():
-    game = MyGame(WIDTH, HEIGHT, "Cure the Virus")
+    game = Chapter4View(WIDTH, HEIGHT, "Cure the Virus")
     game.setup()
     arcade.run()
 
