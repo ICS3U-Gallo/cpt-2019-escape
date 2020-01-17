@@ -164,8 +164,12 @@ class Chapter3View(arcade.View):
                 self.window.show_view(retry)
 
             if len(arcade.check_for_collision_with_list(self.player_sprite, self.key_list)) > 0:
-                winner = WinnerView(self)
-                self.window.show_view(winner)
+                #winner = WinnerView(self)
+                #self.window.show_view(winner)
+                #arcade.draw_text("Chapter 1", settings.WIDTH / 2, settings.HEIGHT / 2,
+                #                arcade.color.BLACK, font_size=30, anchor_x="center")
+                self.director.next_view()
+
 
     def on_key_press(self, key, modifiers):
 
@@ -177,9 +181,9 @@ class Chapter3View(arcade.View):
         elif key == arcade.key.RIGHT:
             self.player_sprite.change_x = MOVEMENT_SPEED
 
-        if key == arcade.key.ESCAPE:
-            pause = PauseView(self)
-            self.window.show_view(pause)
+       # if key == arcade.key.ESCAPE:
+       #     pause = PauseView(self)
+       #     self.window.show_view(pause)
 
     def on_key_release(self, key, modifiers):
 
@@ -254,10 +258,9 @@ class WinnerView(arcade.View):
                          font_size=20,
                          anchor_x="center")
 
-    def on_key_press(self, key, _modifiers):
+    def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:  # reset game
-            game = Chapter3View()
-            self.window.show_view(game)
+            self.director.next_view()
 
 
 class RetryView(arcade.View):
