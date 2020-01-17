@@ -306,6 +306,7 @@ class RetryView(arcade.View):
 
     def on_key_press(self, key, _modifiers):
         if key == arcade.key.SPACE:  # reset game
+            game = Chapter3View()
             self.window.show_view(game)
 
 
