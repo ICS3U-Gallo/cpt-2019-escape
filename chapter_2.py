@@ -66,7 +66,7 @@ class MyCollectCure (arcade.View):
 
         cure_texture = arcade.make_soft_square_texture(40, arcade.color.NAVY_BLUE, outer_alpha=255)
 
-        for i in range(25):
+        for i in range(30):
             cure = arcade.Sprite()
             cure.texture = cure_texture
             cure.center_x = random.randrange(100, 900)
