@@ -20,7 +20,7 @@ class Chapter4View(arcade.Window):
 
         self.MOVEMENT_SPEED = 5
 
-        self.STARTING_ENEMY_COUNT = 10
+        self.STARTING_ENEMY_COUNT = 15
 
         self.sprite1 = arcade.Sprite(
                                     center_x=centerx_of_screen,
@@ -77,7 +77,7 @@ class Chapter4View(arcade.Window):
         life_count = (f"Lives: {self.lives}")
         arcade.draw_text(life_count, 30, (HEIGHT - 40), arcade.color.WHITE, 20)
 
-        if len(self.enemies) == 0 :
+        if len(self.enemies) == 0 and self.lives > 0:
             win_text = "You have received these items to obtain the key! "
             arcade.draw_text(win_text, (WIDTH/3-100), (HEIGHT-200), arcade.color.WHITE, 25)
             arcade.draw_circle_filled(WIDTH/2, HEIGHT/2, 50, arcade.color.YELLOW, 128)
@@ -87,7 +87,7 @@ class Chapter4View(arcade.Window):
             arcade.draw_line((WIDTH*2/3), (HEIGHT/2-50), (WIDTH*2/3), (HEIGHT/2 +50),
                              arcade.color.BABY_BLUE, 25)
         
-        if self.lives <= 0:
+        if self.lives <= 0 and len(self.enemies) > 0:
             lose_text = "You failed in curing the viruses."
             arcade.draw_text(lose_text, (WIDTH/3-50), (HEIGHT-200), arcade.color.WHITE, 25)
 
