@@ -8,6 +8,7 @@ import settings
 from menu import MenuView
 from chapter_3 import Chapter3View
 from chapter_4 import Chapter4View
+from chapter_4instructions import Chapter4Instructions
 from chapter_5 import Chapter5View
 
 class Director(arcade.Window):
@@ -17,6 +18,7 @@ class Director(arcade.Window):
         self.views = [
             MenuView,
             Chapter3View,
+            Chapter4Instructions
             Chapter4View,
             Chapter5View
         ]
