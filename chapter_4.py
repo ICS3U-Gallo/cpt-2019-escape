@@ -9,9 +9,9 @@ WIDTH = 1200
 HEIGHT = 600
 
 
-class Chapter4View(arcade.Window):
-    def __init__(self, width, height, title):
-        super().__init__(width, height, title)
+class Chapter4View(arcade.View):
+    def __init__(self):
+        super().__init__()
 
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -20,7 +20,7 @@ class Chapter4View(arcade.Window):
 
         self.MOVEMENT_SPEED = 5
 
-        self.STARTING_ENEMY_COUNT = 10
+        self.STARTING_ENEMY_COUNT = 15
 
         self.sprite1 = arcade.Sprite(
                                     center_x=centerx_of_screen,
@@ -77,9 +77,11 @@ class Chapter4View(arcade.Window):
         life_count = (f"Lives: {self.lives}")
         arcade.draw_text(life_count, 30, (HEIGHT - 40), arcade.color.WHITE, 20)
 
-        if len(self.enemies) == 0 :
+        if len(self.enemies) == 0 and self.lives > 0:
             win_text = "You have received these items to obtain the key! "
-            arcade.draw_text(win_text, (WIDTH/3-100), (HEIGHT-200), arcade.color.WHITE, 25)
+            win_text2 = "Press 'P' to get to the key"
+            arcade.draw_text(win_text, (WIDTH/3-100), (HEIGHT-100), arcade.color.WHITE, 25)
+            arcade.draw_text(win_text2, (WIDTH/3-100), (HEIGHT-200), arcade.color.WHITE, 25)
             arcade.draw_circle_filled(WIDTH/2, HEIGHT/2, 50, arcade.color.YELLOW, 128)
             arcade.draw_lrtb_rectangle_filled((WIDTH/3-50), (WIDTH/3 + 50),
                                               (HEIGHT/2 + 50), (HEIGHT/2-50),
@@ -87,7 +89,7 @@ class Chapter4View(arcade.Window):
             arcade.draw_line((WIDTH*2/3), (HEIGHT/2-50), (WIDTH*2/3), (HEIGHT/2 +50),
                              arcade.color.BABY_BLUE, 25)
         
-        if self.lives <= 0:
+        if self.lives <= 0 and len(self.enemies) > 0:
             lose_text = "You failed in curing the viruses."
             arcade.draw_text(lose_text, (WIDTH/3-50), (HEIGHT-200), arcade.color.WHITE, 25)
 
@@ -167,6 +169,9 @@ class Chapter4View(arcade.Window):
             self.left_pressed = True
         elif key == arcade.key.D:
             self.right_pressed = True
+        
+        if key == arcade.key.P:
+            self.director.next_view()
 
     def on_key_release(self, key, key_modifiers):
         if key == arcade.key.W:

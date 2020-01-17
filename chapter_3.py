@@ -9,7 +9,7 @@ SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
 WIDTH = 800
 HEIGHT = 600
-TITLE = "A Simple Jumping Game"
+TITLE = "JUMP OVER THE VIRUS MINIONS!"
 
 # Physics
 MOVEMENT_SPEED = 5
@@ -275,8 +275,8 @@ class RetryView(arcade.View):
     def on_draw(self):
         arcade.start_render()
 
-        arcade.draw_text("DEFEAT", WIDTH / 2, HEIGHT / 2 + 50,
-                         arcade.color.BLACK, font_size=50, anchor_x="center")
+        arcade.draw_text("DEFEAT! Don't let the virus minions touch you!", WIDTH / 2, HEIGHT / 2 + 50,
+                         arcade.color.BLACK, font_size=25, anchor_x="center")
 
         arcade.draw_text("Press Spacebar to Retry",
                          WIDTH / 2,
