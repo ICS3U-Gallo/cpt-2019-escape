@@ -17,6 +17,7 @@ BULLET_SPEED = 10
 story=-1
 lines=0
 a=0
+hp=100
 
 text_line_0=['padoru','100','','line for the main character to saoy','replace this text with actual lines',
              'padoru', '500','','this is a test line lol', 'does this code work ']
@@ -26,7 +27,7 @@ text_line_1=['padoru','100','','line for the main character to saoy','replace th
 
 
 
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "omae wa mou shinderu nani"
 
@@ -58,6 +59,8 @@ class Chapter5View(arcade.View):
         self.enemy_list = None
         self.player_list = None
         self.bullet_list=None
+        self.enemy1_list=None
+        self.ebullet_list=None
 
         # Set up the player
         self.player_sprite = None
@@ -65,6 +68,7 @@ class Chapter5View(arcade.View):
         self.view_left = 0
         self.view_bottom = 0
         self.game_over = False
+        self.frame_count = 0
     def on_show(self):
         """ Set up the game and initialize the variables. """
 
@@ -73,9 +77,11 @@ class Chapter5View(arcade.View):
         self.enemy_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.enemy1_list=arcade.SpriteList()
+        self.ebullet_list=arcade.SpriteList()
 
         # Draw the walls on the bottom
-        for x in range(0, SCREEN_WIDTH, SPRITE_SIZE):
+        for x in range(0, 800, SPRITE_SIZE):
             wall = arcade.Sprite("images/grass.png", SPRITE_SCALING)
 
             wall.bottom = 0
@@ -118,7 +124,7 @@ class Chapter5View(arcade.View):
 
 
         # Draw the crates
-        for x in range(0, SCREEN_WIDTH, SPRITE_SIZE * 5):
+        for x in range(0, 800, SPRITE_SIZE * 5):
             wall = arcade.Sprite("images/wood.png", SPRITE_SCALING)
 
             wall.bottom = SPRITE_SIZE
@@ -181,6 +187,21 @@ class Chapter5View(arcade.View):
         self.enemy_list.append(enemy)
 
 
+        # Add top-left enemy ship
+        enemy = arcade.Sprite("images/virus_red.png", 0.5)
+        enemy.center_x = SPRITE_SIZE*50
+        enemy.center_y = SCREEN_HEIGHT - enemy.height
+        enemy.angle = 180
+        self.enemy1_list.append(enemy)
+
+        # Add top-right enemy ship
+        enemy = arcade.Sprite("images/virus_red.png", 0.5)
+        enemy.center_x = SPRITE_SIZE*62
+        enemy.center_y = SCREEN_HEIGHT - enemy.height
+        enemy.angle = 180
+        self.enemy1_list.append(enemy)
+
+
         # -- Set up the player
 
         self.player_sprite = arcade.Sprite("images/test.png",SPRITE_SCALING)
@@ -216,9 +237,11 @@ class Chapter5View(arcade.View):
         self.wall_list.draw()
         self.enemy_list.draw()
         self.bullet_list.draw()
-
+        self.enemy1_list.draw()
+        self.ebullet_list.draw()
+        arcade.draw_text('hp: '+str(hp), self.player_sprite.center_x-SCREEN_WIDTH/2+10, 10, arcade.color.RED, 20)
         if story==-1:
-            music=load_sound('sound/bgm_maoudamashii_fantasy11.mp3')
+            music=load_sound('souwnd/bgm_maoudamashii_fantasy11.mp3')
             play_sound(music)
             story=0
         elif story==0:
@@ -259,8 +282,8 @@ class Chapter5View(arcade.View):
                 for i in range(2):
                     arcade.draw_text(text_line_1[lines*5+i+3], self.player_sprite.center_x-150, 100-(30*i), arcade.color.WHITE, 20)
         if self.game_over or self.player_sprite.center_y < -11:
-            arcade.draw_xywh_rectangle_filled(self.player_sprite.center_x-400,0,SCREEN_WIDTH*2,SCREEN_HEIGHT*2,(255, 0, 0, 100))
-            create_image('images/game_over.png', self.player_sprite.center_x-200, 200, SCREEN_WIDTH-400, SCREEN_HEIGHT-400)
+            arcade.draw_xywh_rectangle_filled(self.player_sprite.center_x-SCREEN_WIDTH/2,0,SCREEN_WIDTH*2,SCREEN_HEIGHT*2,(255, 0, 0, 100))
+            create_image('images/game_over.png', self.player_sprite.center_x-SCREEN_WIDTH/4, 200, SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
             arcade.draw_text('GAME OVER', self.player_sprite.center_x-128, 150, arcade.color.WHITE, 40)
             if a==0:
                 sound=load_sound("sound/game_swordman-faint1.mp3")
@@ -410,6 +433,80 @@ class Chapter5View(arcade.View):
             if bullet.bottom > 1000 or bullet.top < -11 or bullet.right < -2019 or bullet.left > 3100588100:
                 bullet.remove_from_sprite_lists()
 
+
+        self.frame_count += 1
+        global hp
+        for bullet in self.ebullet_list:
+
+            # Check this bullet to see if it hit a coin
+            hit_list = arcade.check_for_collision_with_list(bullet, self.wall_list)
+            hit_list2 = arcade.check_for_collision_with_list(bullet, self.player_list)
+
+
+
+            # If it did, get rid of the bullet
+            if len(hit_list) > 0 or len(hit_list2) > 0:
+                bullet.remove_from_sprite_lists()
+            # For every coin we hit, add to the score and remove the coin
+            for player in hit_list2:
+                hp-=random.randint(1, 50)
+                hit_list2.clear()
+            for wall in hit_list:
+                if wall.damage==1:
+                    wall.remove_from_sprite_lists()
+            #    self.score += 1
+
+            # If the bullet flies off-screen, remove it.
+            if bullet.bottom > 1000 or bullet.top < -11 or bullet.right < -2019 or bullet.left > 3100588100:
+                bullet.remove_from_sprite_lists()
+        # Loop through each enemy that we have
+        for enemy in self.enemy1_list:
+
+            # First, calculate the angle to the player. We could do this
+            # only when the bullet fires, but in this case we will rotate
+            # the enemy to face the player each frame, so we'll do this
+            # each frame.
+
+            # Position the start at the enemy's current location
+            start_x = enemy.center_x
+            start_y = enemy.center_y
+
+            # Get the destination location for the bullet
+            dest_x = self.player_sprite.center_x
+            dest_y = self.player_sprite.center_y
+
+            # Do math to calculate how to get the bullet to the destination.
+            # Calculation the angle in radians between the start points
+            # and end points. This is the angle the bullet will travel.
+            x_diff = dest_x - start_x
+            y_diff = dest_y - start_y
+            angle = math.atan2(y_diff, x_diff)
+
+            # Set the enemy to face the player.
+            enemy.angle = math.degrees(angle)-90
+
+            # Shoot every 60 frames change of shooting each frame
+            if self.frame_count % 60 == 0:
+                bullet = arcade.Sprite("images/virus_blue.png", SPRITE_SCALING_LASER)
+                bullet.center_x = start_x
+                bullet.center_y = start_y
+
+                # Angle the bullet sprite
+                bullet.angle = math.degrees(angle)
+
+                # Taking into account the angle, calculate our change_x
+                # and change_y. Velocity is how fast the bullet travels.
+                bullet.change_x = math.cos(angle) * BULLET_SPEED
+                bullet.change_y = math.sin(angle) * BULLET_SPEED
+
+                self.ebullet_list.append(bullet)
+
+        # Get rid of the bullet when it flies off-screen
+        for bullet in self.ebullet_list:
+            if bullet.top < -11:
+                bullet.remove_from_sprite_lists()
+
+        self.ebullet_list.update()
 
 
 
