@@ -17,16 +17,17 @@ BULLET_SPEED = 10
 story=-1
 lines=0
 a=0
+b=0
 hp=100
 
-text_line_0=['padoru','100','','line for the main character to saoy','replace this text with actual lines',
-             'padoru', '500','','this is a test line lol', 'does this code work ']
+text_line_0=['Padoru','100','','Hello, human.','Welcome to the last stage of the virus (click to continue)',
+             'Padoru', '500','','this is a test line lol', 'does this code work ']
 text_line_1=['padoru','100','','line for the main character to saoy','replace this text with actual lines',
              'padoru', '500','','this is a test line lol', 'does this code work ']
 
 
 
-
+game_over=0
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "omae wa mou shinderu nani"
@@ -69,6 +70,7 @@ class Chapter5View(arcade.View):
         self.view_bottom = 0
         self.game_over = False
         self.frame_count = 0
+
     def on_show(self):
         """ Set up the game and initialize the variables. """
 
@@ -216,6 +218,16 @@ class Chapter5View(arcade.View):
 
         # Set the background color
         arcade.set_background_color((188, 212, 230)	)
+        global story
+        global lines
+        global a
+        global b
+        global hp
+        story = -1
+        lines = 0
+        a = 0
+        b = 0
+        hp = 100
 
 
     def on_draw(self):
@@ -224,6 +236,7 @@ class Chapter5View(arcade.View):
         global text_line_0
         global text_line_1
         global a
+        global game_over
         """
                 Render the screen.
                 """
@@ -231,7 +244,10 @@ class Chapter5View(arcade.View):
         # This command has to happen before we start drawing
         arcade.start_render()
 
+
         # Draw all the sprites.
+        if self.player_sprite.center_x>SPRITE_SIZE*45:
+            create_image('images/boss_bg.jpg', self.view_left, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
         create_image('images/mahou.png', SPRITE_SIZE*35, SPRITE_SIZE, SPRITE_SIZE*4, SPRITE_SIZE*4)
         self.player_list.draw()
         self.wall_list.draw()
@@ -253,15 +269,15 @@ class Chapter5View(arcade.View):
 
             else:
 
-                img_pos=int(text_line_0[lines*5+1])
-                #arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(255, 0, 0, 100)) good for death screen
-                arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(0, 0, 0, 150))
+                img_pos = int(text_line_0[lines * 5 + 1])
+                    # arcade.draw_xywh_rectangle_filled(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,(255, 0, 0, 100)) good for death screen
+                arcade.draw_xywh_rectangle_filled(self.view_left, 0, SCREEN_WIDTH * 1.2, SCREEN_HEIGHT, (0, 0, 0, 150))
 
-                create_image('images/'+text_line_0[lines*5]+text_line_0[lines*5+2]+'.png', img_pos, 0, 300,450)
-                arcade.draw_xywh_rectangle_filled(25,25,SCREEN_WIDTH-50,145,(0, 0, 0, 150))
-                arcade.draw_text(text_line_0[lines*5], 150, 130, arcade.color.WHITE, 20)
+                create_image('images/' + text_line_0[lines * 5] + text_line_0[lines * 5 + 2] + '.png',img_pos + self.view_left, 0, 300, 450)
+                arcade.draw_xywh_rectangle_filled(self.view_left + 25, 25, SCREEN_WIDTH - 50, 145, (0, 0, 0, 150))
+                arcade.draw_text(text_line_0[lines * 5], self.view_left + SCREEN_WIDTH / 3, 130, arcade.color.WHITE, 20)
                 for i in range(2):
-                    arcade.draw_text(text_line_0[lines*5+i+3], 150, 100-(30*i), arcade.color.WHITE, 20)
+                    arcade.draw_text(text_line_0[lines * 5 + i + 3], self.view_left + SCREEN_WIDTH / 3, 100 - (30 * i),arcade.color.WHITE, 20)
         elif story==1:
             if len(text_line_1)//5<=lines:
                 sound=load_sound("sound/game_swordman-start1.mp3")
@@ -285,22 +301,31 @@ class Chapter5View(arcade.View):
             arcade.draw_xywh_rectangle_filled(self.view_left,0,SCREEN_WIDTH*2,SCREEN_HEIGHT*2,(255, 0, 0, 100))
             create_image('images/game_over.png', self.view_left+SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
             arcade.draw_text('GAME OVER', self.view_left+SCREEN_WIDTH/2.5, 100, arcade.color.WHITE, 40)
+            arcade.draw_text('Press space to restart', self.view_left + SCREEN_WIDTH / 3, 70, arcade.color.WHITE, 40)
+            game_over=1
             if a==0:
                 sound=load_sound("sound/game_swordman-faint1.mp3")
                 play_sound(sound)
                 a+=1
 
     def on_key_press(self, key, modifiers):
-
-        if key == arcade.key.W:
-            if self.physics_engine.can_jump():
-                self.player_sprite.change_y = JUMP_SPEED
-                sound=load_sound("sound/game_swordman-attack1.mp3")
-                play_sound(sound)
-        elif key == arcade.key.A:
-            self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.D:
-            self.player_sprite.change_x = MOVEMENT_SPEED
+        global game_over
+        if story==11 and self.player_sprite.center_y>-11:
+            if key == arcade.key.W:
+                if self.physics_engine.can_jump():
+                    self.player_sprite.change_y = JUMP_SPEED
+                    sound=load_sound("sound/game_swordman-attack1.mp3")
+                    play_sound(sound)
+            elif key == arcade.key.A:
+                self.player_sprite.change_x = -MOVEMENT_SPEED
+            elif key == arcade.key.D:
+                self.player_sprite.change_x = MOVEMENT_SPEED
+        else:
+            self.player_sprite.change_x = 0
+        if key == arcade.key.SPACE and game_over==1:  # reset game
+            game_over=0
+            game = Chapter5View()
+            self.window.show_view(game)
         # self.director.next_view()
 
 
@@ -355,6 +380,32 @@ class Chapter5View(arcade.View):
 
     def on_update(self, delta_time):
         global story
+        # --- Manage Scrolling ---
+
+        # Keep track of if we changed the boundary. We don't want to call the
+        # set_viewport command if we didn't change the view port.
+        changed = False
+        # Scroll leftd
+        left_boundary = self.view_left + VIEWPORT_MARGIN
+        if self.player_sprite.left < left_boundary:
+            self.view_left -= left_boundary - self.player_sprite.left
+            changed = True
+
+            # Scroll right
+        right_boundary = self.view_left + SCREEN_WIDTH - VIEWPORT_MARGIN
+        if self.player_sprite.right > right_boundary:
+            self.view_left += self.player_sprite.right - right_boundary
+            changed = True
+        if changed:
+            arcade.set_viewport(self.view_left, SCREEN_WIDTH + self.view_left - 1, self.view_bottom,
+                                SCREEN_HEIGHT + self.view_bottom - 1)
+
+        # Update the player using the physics engine
+        self.physics_engine.update()
+
+        # See if the player hit a worm. If so, game over.
+        if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
+            self.game_over = True
         """ Movement and game logic """
 
         # Update the player based on the physics engine
@@ -377,32 +428,7 @@ class Chapter5View(arcade.View):
                 elif enemy.boundary_right is not None and enemy.right > enemy.boundary_right:
                     enemy.change_x *= -1
 
-            # --- Manage Scrolling ---
 
-                # Keep track of if we changed the boundary. We don't want to call the
-                # set_viewport command if we didn't change the view port.
-            changed = False
-                    # Scroll leftd
-            left_boundary = self.view_left + VIEWPORT_MARGIN
-            if self.player_sprite.left < left_boundary:
-                self.view_left -= left_boundary - self.player_sprite.left
-                changed = True
-
-                # Scroll right
-            right_boundary = self.view_left + SCREEN_WIDTH - VIEWPORT_MARGIN
-            if self.player_sprite.right > right_boundary:
-                self.view_left += self.player_sprite.right - right_boundary
-                changed = True
-            if changed:
-                arcade.set_viewport(self.view_left,SCREEN_WIDTH + self.view_left - 1,self.view_bottom,SCREEN_HEIGHT + self.view_bottom - 1)
-
-
-            # Update the player using the physics engine
-            self.physics_engine.update()
-
-            # See if the player hit a worm. If so, game over.
-            if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
-                self.game_over = True
         """ Movement and game logic """
 
         # Call update on all sprites
@@ -434,7 +460,7 @@ class Chapter5View(arcade.View):
             #    self.score += 1
 
             # If the bullet flies off-screen, remove it.
-            if bullet.bottom > 1000 or bullet.top < -11 or bullet.right < -2019 or bullet.left > 3100588100:
+            if bullet.bottom > 1000 or bullet.top < -11 or bullet.right < -2019 or bullet.left > SPRITE_SIZE*70:
                 bullet.remove_from_sprite_lists()
 
 
@@ -464,7 +490,13 @@ class Chapter5View(arcade.View):
             if bullet.bottom > 1000 or bullet.top < -11 or bullet.right < -2019 or bullet.left > 3100588100:
                 bullet.remove_from_sprite_lists()
         # Loop through each enemy that we have
+        global b
         if self.player_sprite.center_x>SPRITE_SIZE*45:
+            if b==0:
+                #stop_sound()
+                #music=load_sound('sound/bgm_maodamashii_fantasy3.ogg')
+                #play_sound(music)
+                b=1
             for enemy in self.enemy1_list:
 
                 # First, calculate the angle to the player. We could do this
