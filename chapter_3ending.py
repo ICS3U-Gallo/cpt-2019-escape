@@ -10,7 +10,7 @@ class Chapter3EndingView(arcade.View):
     def on_draw(self):
         arcade.start_render()
         arcade.draw_text("Great Work!\n"
-                         "You got the key for the ammunition tank!\n"
+                         "You got the key for the artillery!\n"
                          "Press the right key to continue" , settings.WIDTH/2, settings.HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
 
