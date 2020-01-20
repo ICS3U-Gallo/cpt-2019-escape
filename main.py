@@ -8,6 +8,7 @@ import settings
 from menu import MenuView
 from chapter_2 import MyCollectCure
 from chapter_2Instructions import InstructionsView
+from chapter_3instructions import Chapter3InstructionsView
 from chapter_3 import Chapter3View
 from chapter_4 import Chapter4View
 from chapter_4instructions import Chapter4Instructions
