@@ -11,7 +11,7 @@ class Chapter3InstructionsView(arcade.View):
         arcade.start_render()
         arcade.draw_text("Welcome to Chapter 3!\n"
                          "To use the antidote, \n"
-                         "you need a key for an ammunition tank to take the viruses out! \n" 
+                         "you need a key for the artillery to take the viruses out! \n" 
                          "But beware! The virus sent you in a world where its slime and fly minions \n"
                          "WILL KILL YOU IF YOU TOUCH THEM! \n"
                          "Dodge using the up, down, left, right keys and get the key for the tank! \n"
