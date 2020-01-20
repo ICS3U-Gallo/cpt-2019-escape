@@ -3,7 +3,7 @@ import arcade
 import settings
 
 
-class InstructionsView(arcade.View):
+class Chapter3EndingView(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     """
     from utils import FakeDirector
     window = arcade.Window(settings.WIDTH, settings.HEIGHT)
-    my_view = InstructionsView()
+    my_view = Chapter3EndingView()
     my_view.director = FakeDirector(close_on_next_view=True)
     window.show_view(my_view)
     arcade.run()
