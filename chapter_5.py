@@ -25,6 +25,7 @@ music_play=0
 text_line_0=['Padoru','50','','Hello, human.','Welcome to the last stage of the virus (click to continue)',
              'You', '50','','But it\'s not even Christmas yet', '',
              'Padoru', '50','','In this level you have to fight the virus boss.', '',
+             'Padoru', '50','','Controls: WASD to move, mouse to aim and shoot.', '',
              'Padoru', '50','','There are 3 types of viruses in this level:', 'Blue Virus, Red Virus and Purple Virus.',
              'Padoru', '50','','Blue Viruses can be easily destroyed by your bullets,', 'but Red Viruses are immune to bullets. ',
              'Padoru', '50','','Normal sized Viruses do universal damage to your player', '(defeats your player in 1 hit)',
