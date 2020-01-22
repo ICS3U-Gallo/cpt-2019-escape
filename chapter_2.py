@@ -115,8 +115,7 @@ class MyCollectCure (arcade.View):
         if len(self.cure_list) == 0:
             win_text = "You have received the cure! "
             arcade.draw_text(win_text, (WIDTH/3-50), (HEIGHT- 200), arcade.color.WHITE, 25)
-            arcade.draw_rectangle_filled(WIDTH/2, HEIGHT/2, 50, arcade.color.GREEN, 128)
-
+            
         if self.lives <= 0:
             lose_text = "You failed in curing the viruses."
             arcade.draw_text(lose_text, (WIDTH/3-50), (HEIGHT-200), arcade.color.WHITE, 25)
