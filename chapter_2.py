@@ -253,7 +253,11 @@ class MyCollectCure (arcade.View):
             self.left_pressed = False
         elif key == arcade.key.RIGHT:
             self.right_pressed = False
-
+    
+    def on_key_press(self, key, _modifiers):
+        if key == arcade.key.SPACE:  # reset game
+            game = MyCollectCure()
+            self.window.show_view(game)
 
 def main():
     window = MyGame(WIDTH, HEIGHT, "Collect the Cure")
