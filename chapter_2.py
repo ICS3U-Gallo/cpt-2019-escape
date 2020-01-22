@@ -66,7 +66,7 @@ class MyCollectCure (arcade.View):
 
         cure_texture = arcade.make_soft_square_texture(40, arcade.color.NAVY_BLUE, outer_alpha=255)
 
-        for i in range(30):
+        for i in range(25):
             cure = arcade.Sprite()
             cure.texture = cure_texture
             cure.center_x = random.randrange(100, 900)
@@ -114,11 +114,15 @@ class MyCollectCure (arcade.View):
 
         if len(self.cure_list) == 0:
             win_text = "You have received the cure! "
+            skip_screen = "PRESS SPACE TO MOVE ON"
             arcade.draw_text(win_text, (WIDTH/3-50), (HEIGHT- 200), arcade.color.WHITE, 25)
-            
+            arcade.draw_text(skip_screen, (WIDTH/3-50), (HEIGHT- 300), arcade.color.WHITE, 25)
+
         if self.lives <= 0:
             lose_text = "You failed in curing the viruses."
+            skip_screen = "PRESS SPACE TO MOVE ON"
             arcade.draw_text(lose_text, (WIDTH/3-50), (HEIGHT-200), arcade.color.WHITE, 25)
+            arcade.draw_text(skip_screen, (WIDTH/3-50), (HEIGHT- 300), arcade.color.WHITE, 25)
 
         #timer
         minutes = int(self.total_time) // 60
@@ -206,7 +210,6 @@ class MyCollectCure (arcade.View):
 
             for virus in virus_hit_list:
                 virus.remove_from_sprite_lists()
-                self.score -= 2
                 self.lives -= 1
 
             for cure in cure_hit_list:
@@ -241,6 +244,8 @@ class MyCollectCure (arcade.View):
             self.left_pressed = True
         elif key == arcade.key.RIGHT:
             self.right_pressed = True
+        if key == arcade.key.SPACE: 
+            self.director.next_view()
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
@@ -253,11 +258,7 @@ class MyCollectCure (arcade.View):
             self.left_pressed = False
         elif key == arcade.key.RIGHT:
             self.right_pressed = False
-    
-    def on_key_press(self, key, _modifiers):
-        if key == arcade.key.SPACE:  # reset game
-            game = MyCollectCure()
-            self.window.show_view(game)
+
 
 def main():
     window = MyGame(WIDTH, HEIGHT, "Collect the Cure")
