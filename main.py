@@ -22,6 +22,7 @@ class Director(arcade.Window):
         self.view_index = 0
         self.views = [
             MenuView,
+            MyMaze,
             InstructionsView,
             MyCollectCure,
             Chapter3InstructionsView
