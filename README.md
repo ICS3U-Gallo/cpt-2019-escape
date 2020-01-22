@@ -1,5 +1,6 @@
 # Escape
-First Minigame (Diya): 
+First Minigame (Diya): Escape the maze to collect one of the ingredients for the antidote. The first ingredient for the antidote is obtained when you finish the level.
+
 
 Second Minigame (Alex): 
 The collector needs the 3 rare jewels to protect his trading company. He is willing to trade for the piece of the antidote against the Virus. You need to catch all but remember there are diseased virus that if you do kill will infect you so be careful!. 
