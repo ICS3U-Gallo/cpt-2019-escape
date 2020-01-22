@@ -259,7 +259,6 @@ class MyCollectCure (arcade.View):
         elif key == arcade.key.RIGHT:
             self.right_pressed = False
 
-
 def main():
     window = MyGame(WIDTH, HEIGHT, "Collect the Cure")
     arcade.run()
