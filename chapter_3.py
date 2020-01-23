@@ -6,9 +6,6 @@ import random
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
-
-WIDTH = 800
-HEIGHT = 600
 TITLE = "JUMP OVER THE VIRUS MINIONS!"
 
 # Physics
@@ -39,8 +36,8 @@ class Chapter3View(arcade.View):
         self.view_bottom = 0
         self.game_over = False
 
-        self.half_width = WIDTH / 2
-        self.half_height = HEIGHT / 2
+        self.half_width = settings.WIDTH / 2
+        self.half_height = settings.HEIGHT / 2
 
     def on_show(self):
         self.wall_list = arcade.SpriteList()
@@ -48,7 +45,7 @@ class Chapter3View(arcade.View):
         self.player_list = arcade.SpriteList()
         self.key_list = arcade.SpriteList()
 
-        for x in range(0, WIDTH, SPRITE_SIZE):
+        for x in range(0, settings.WIDTH, SPRITE_SIZE):
             wall = arcade.Sprite(":resources:images/tiles/planetMid.png", SPRITE_SCALING)
 
             wall.bottom = 0
@@ -69,7 +66,7 @@ class Chapter3View(arcade.View):
             wall.left = x + 250
             self.wall_list.append(wall)
             
-        for x in range(0, WIDTH, SPRITE_SIZE * 5):
+        for x in range(0, settings.WIDTH, SPRITE_SIZE * 5):
             wall = arcade.Sprite(":resources:images/items/ladderMid.png", SPRITE_SCALING)
 
             wall.bottom = SPRITE_SIZE
@@ -211,18 +208,18 @@ class PauseView(arcade.View):
                                           bottom=player_sprite.bottom,
                                           color=arcade.color.ORANGE + (200,))
 
-        arcade.draw_text("PAUSED", WIDTH / 2, HEIGHT / 2 + 50,
+        arcade.draw_text("PAUSED", settings.WIDTH / 2, settings.HEIGHT / 2 + 50,
                          arcade.color.BLACK, font_size=50, anchor_x="center")
 
         arcade.draw_text("Press Esc. to return",
-                         WIDTH / 2,
-                         HEIGHT / 2,
+                         settings.WIDTH / 2,
+                         settings.HEIGHT / 2,
                          arcade.color.BLACK,
                          font_size=20,
                          anchor_x="center")
         arcade.draw_text("Press Enter to reset",
-                         WIDTH / 2,
-                         HEIGHT / 2 - 30,
+                         settings.WIDTH / 2,
+                         settings.HEIGHT / 2 - 30,
                          arcade.color.BLACK,
                          font_size=20,
                          anchor_x="center")
@@ -248,12 +245,12 @@ class WinnerView(arcade.View):
     def on_draw(self):
         arcade.start_render()
 
-        arcade.draw_text("WINNER! YOU GOT THE KEY FOR THE AMMUNITION TANK!", WIDTH / 2, HEIGHT / 2 + 50,
+        arcade.draw_text("WINNER! YOU GOT THE KEY FOR THE AMMUNITION TANK!", settings.WIDTH / 2, settings.HEIGHT / 2 + 50,
                          arcade.color.BLACK, font_size=20, anchor_x="center")
 
         arcade.draw_text("Press Enter to Go to Next Level",
-                         WIDTH / 2,
-                         HEIGHT / 2,
+                         settings.WIDTH / 2,
+                         settings.HEIGHT / 2,
                          arcade.color.BLACK,
                          font_size=20,
                          anchor_x="center")
@@ -275,12 +272,12 @@ class RetryView(arcade.View):
     def on_draw(self):
         arcade.start_render()
 
-        arcade.draw_text("DEFEAT! Don't let the virus minions touch you!", WIDTH / 2, HEIGHT / 2 + 50,
+        arcade.draw_text("DEFEAT! Don't let the virus minions touch you!", settings.WIDTH / 2, settings.HEIGHT / 2 + 50,
                          arcade.color.BLACK, font_size=25, anchor_x="center")
 
         arcade.draw_text("Press Spacebar to Retry",
-                         WIDTH / 2,
-                         HEIGHT / 2,
+                         settings.WIDTH / 2,
+                         settings.HEIGHT / 2,
                          arcade.color.BLACK,
                          font_size=20,
                          anchor_x="center")
